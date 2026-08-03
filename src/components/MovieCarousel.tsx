@@ -1,8 +1,10 @@
 import styled from "styled-components/native";
-import { IMovie } from "../types/movies";
+
 import { StyleSheet } from "react-native";
-import { makeImagePath } from "../utils/makeImagePath";
+
 import { BlurView } from "expo-blur";
+import { IMovie } from "../types/movies";
+import { makeImagePath } from "../utils/makeImagePath";
 
 interface MovieCarouselProps {
   movie: IMovie;

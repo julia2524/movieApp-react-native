@@ -7,10 +7,9 @@ import {
   useTopRatedMovies,
   useUpcomingMovies,
 } from "../hooks/useMovies";
-
-import VerticalMovieCard from "../components/VerticalMovieCard";
-import HorizontalMovieList from "../components/HorizontalMovieList";
 import MovieCarousel from "../components/MovieCarousel";
+import HorizontalMediaList from "../components/HorizontalMediaList";
+import VerticalMediaCard from "../components/VerticalMediaCard";
 
 const Container = styled.View`
   /* background-color: ${(props) => props.theme.mainBgColor}; */
@@ -66,7 +65,7 @@ export default function Movies() {
                   keyExtractor={(item) => item.id.toString()}
                   data={topData?.results ?? []}
                   renderItem={({ item }) => (
-                    <HorizontalMovieList movie={item} />
+                    <HorizontalMediaList movie={item} />
                   )}
                 />
               </HView>
@@ -74,7 +73,7 @@ export default function Movies() {
             </>
           }
           data={upcomingData?.results ?? []}
-          renderItem={({ item }) => <VerticalMovieCard movie={item} />}
+          renderItem={({ item }) => <VerticalMediaCard movie={item} />}
         />
       </>
     </Container>

@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 import { IMovie } from "../types/movies";
 import { makeImagePath } from "../utils/makeImagePath";
 
-interface HorizontalMovieListProps {
+interface HorizontalMediaListProps {
   movie: IMovie;
 }
 const HItem = styled.View`
@@ -33,9 +33,9 @@ const HRate = styled.Text`
   text-align: center;
 `;
 
-export default function HorizontalMovieList({
+export default function HorizontalMediaList({
   movie,
-}: HorizontalMovieListProps) {
+}: HorizontalMediaListProps) {
   return (
     <HItem>
       <HImage source={{ uri: makeImagePath(movie.poster_path ?? "") }} />

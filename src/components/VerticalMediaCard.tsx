@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 import { IMovie } from "../types/movies";
 import { makeImagePath } from "../utils/makeImagePath";
 
-interface VerticalMovieCardProps {
+interface VerticalMediaCardProps {
   movie: IMovie;
 }
 
@@ -40,7 +40,7 @@ const Release = styled.Text`
   font-weight: bold;
   padding-bottom: 5px;
 `;
-export default function VerticalMovieCard({ movie }: VerticalMovieCardProps) {
+export default function VerticalMediaCard({ movie }: VerticalMediaCardProps) {
   return (
     <VView>
       <VImage source={{ uri: makeImagePath(movie.poster_path ?? "") }} />
