@@ -8,3 +8,7 @@ export async function getNowPlaying(): Promise<IMovieResponse> {
 export async function getTopRated(): Promise<IMovieResponse> {
   return fetchAPI("/movie/top_rated?language=en-US&page=1");
 }
+
+export async function getUpcoming(): Promise<IMovieResponse> {
+  return fetchAPI("/movie/upcoming?language=en-US&page=1");
+}

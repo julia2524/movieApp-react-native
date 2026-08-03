@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getNowPlaying, getTopRated } from "../api/movies";
+import { getNowPlaying, getTopRated, getUpcoming } from "../api/movies";
 import { IMovieResponse } from "../types/movies";
 
 export function useNowPlaying() {
@@ -14,5 +14,12 @@ export function useTopRatedMovies() {
   return useQuery<IMovieResponse>({
     queryKey: ["movies", "top"],
     queryFn: getTopRated,
+  });
+}
+
+export function useUpcomingMovies() {
+  return useQuery<IMovieResponse>({
+    queryKey: ["movies", "upcoming"],
+    queryFn: getUpcoming,
   });
 }
