@@ -18,17 +18,16 @@ const HImage = styled.Image`
 const HContent = styled.View`
   flex-direction: column;
   width: 120px;
-
   margin-bottom: 5px;
 `;
 const HTitle = styled.Text`
-  color: white;
+  color: ${(props) => props.theme.textColor};
   font-size: 13px;
   font-weight: bold;
   text-align: center;
 `;
 const HRate = styled.Text`
-  color: #a0a0a0;
+  color: ${(props) => props.theme.subTextColor};
   font-size: 13px;
   text-align: center;
 `;

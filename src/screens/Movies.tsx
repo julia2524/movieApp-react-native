@@ -12,7 +12,7 @@ import HorizontalMediaList from "../components/HorizontalMediaList";
 import VerticalMediaCard from "../components/VerticalMediaCard";
 
 const Container = styled.View`
-  /* background-color: ${(props) => props.theme.mainBgColor}; */
+  /* background-color: ${(props) => props.theme.cardBgColor}; */
   flex: 1;
 `;
 
@@ -24,7 +24,7 @@ const HView = styled.View`
 const CategoryTitle = styled.Text`
   padding-top: 15px;
   padding-left: 15px;
-  color: white;
+  color: ${(props) => props.theme.textColor};
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 8px;

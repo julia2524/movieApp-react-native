@@ -4,5 +4,7 @@ declare module "styled-components/native" {
     mainBgColor: string;
     textColor: string;
     accentColor: string;
+    subTextColor: string;
+    cardBgColor: string;
   }
 }

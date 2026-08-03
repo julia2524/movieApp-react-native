@@ -3,8 +3,8 @@ import styled from "styled-components/native";
 import { StyleSheet } from "react-native";
 
 import { BlurView } from "expo-blur";
-import { IMovie } from "../types/movies";
 import { makeImagePath } from "../utils/makeImagePath";
+import { IMovie } from "../types/movies";
 
 interface MovieCarouselProps {
   movie: IMovie;

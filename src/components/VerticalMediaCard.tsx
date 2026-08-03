@@ -25,17 +25,17 @@ const VContent = styled.View`
   flex: 1;
 `;
 const VOverview = styled.Text`
-  color: rgba(255, 255, 255, 0.8);
+  color: ${(props) => props.theme.subTextColor};
   font-size: 12px;
 `;
 const VTitle = styled.Text`
-  color: white;
+  color: ${(props) => props.theme.textColor};
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 8px;
 `;
 const Release = styled.Text`
-  color: white;
+  color: ${(props) => props.theme.subTextColor};
   font-size: 12px;
   font-weight: bold;
   padding-bottom: 5px;
