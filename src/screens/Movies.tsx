@@ -1,5 +1,10 @@
 import { StatusBar } from "expo-status-bar";
-import { ActivityIndicator, FlatList, useWindowDimensions } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  useWindowDimensions,
+} from "react-native";
 import { Carousel } from "react-native-reanimated-carousel";
 import styled from "styled-components/native";
 import {
@@ -10,6 +15,7 @@ import {
 import MovieCarousel from "../components/MovieCarousel";
 import HorizontalMediaList from "../components/HorizontalMediaList";
 import VerticalMediaCard from "../components/VerticalMediaCard";
+import { useState } from "react";
 
 const Container = styled.View`
   /* background-color: ${(props) => props.theme.cardBgColor}; */
@@ -33,12 +39,31 @@ const CategoryTitle = styled.Text`
 export default function Movies() {
   // const theme = useTheme();
   const { width, height } = useWindowDimensions();
+  const [refreshing, setRefreshing] = useState(false);
 
-  const { data: nowData, isLoading: nowLoading } = useNowPlaying();
-  const { data: topData, isLoading: topLoading } = useTopRatedMovies();
-  const { data: upcomingData, isLoading: upcomingLoading } =
-    useUpcomingMovies();
+  const {
+    data: nowData,
+    isLoading: nowLoading,
+    refetch: nowRefetch,
+  } = useNowPlaying();
+  const {
+    data: topData,
+    isLoading: topLoading,
+    refetch: topRefetch,
+  } = useTopRatedMovies();
+  const {
+    data: upcomingData,
+    isLoading: upcomingLoading,
+    refetch: upcomingRefetch,
+  } = useUpcomingMovies();
   const isLoading = nowLoading || topLoading || upcomingLoading;
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await Promise.all([nowRefetch, topRefetch, upcomingRefetch]);
+    setRefreshing(false);
+  };
+
   return isLoading ? (
     <ActivityIndicator
       style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
@@ -47,6 +72,8 @@ export default function Movies() {
     <Container>
       <>
         <FlatList
+          refreshing={refreshing}
+          onRefresh={onRefresh}
           keyExtractor={(item) => item.id.toString()}
           ListHeaderComponent={
             <>
@@ -65,7 +92,11 @@ export default function Movies() {
                   keyExtractor={(item) => item.id.toString()}
                   data={topData?.results ?? []}
                   renderItem={({ item }) => (
-                    <HorizontalMediaList movie={item} />
+                    <HorizontalMediaList
+                      posterPath={item.poster_path ?? ""}
+                      title={item.title}
+                      rating={item.vote_average}
+                    />
                   )}
                 />
               </HView>

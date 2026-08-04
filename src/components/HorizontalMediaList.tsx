@@ -3,7 +3,9 @@ import { IMovie } from "../types/movies";
 import { makeImagePath } from "../utils/makeImagePath";
 
 interface HorizontalMediaListProps {
-  movie: IMovie;
+  posterPath: string;
+  title: string;
+  rating: number;
 }
 const HItem = styled.View`
   margin-right: 15px;
@@ -33,18 +35,18 @@ const HRate = styled.Text`
 `;
 
 export default function HorizontalMediaList({
-  movie,
+  posterPath,
+  title,
+  rating,
 }: HorizontalMediaListProps) {
   return (
     <HItem>
-      <HImage source={{ uri: makeImagePath(movie.poster_path ?? "") }} />
+      <HImage source={{ uri: makeImagePath(posterPath) }} />
       <HContent>
         <HTitle numberOfLines={1} ellipsizeMode="tail">
-          {movie.title.length > 15
-            ? `${movie.title.slice(0, 15)}...`
-            : movie.title}
+          {title.length > 15 ? `${title.slice(0, 15)}...` : title}
         </HTitle>
-        <HRate>⭐️ {movie.vote_average.toFixed(1)} / 10</HRate>
+        <HRate>⭐️ {rating.toFixed(1)} / 10</HRate>
       </HContent>
     </HItem>
   );
