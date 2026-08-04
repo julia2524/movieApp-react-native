@@ -1,5 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAiringToday, getPopular, getTopRatedTV } from "../api/tvs";
+import {
+  getAiringToday,
+  getPopular,
+  getSearchTV,
+  getTopRatedTV,
+} from "../api/tvs";
 import { ITvResponse } from "../types/tv";
 
 export function useAiringToday() {
@@ -19,5 +24,13 @@ export function useTopRatedTV() {
   return useQuery<ITvResponse>({
     queryKey: ["tv", "topRated"],
     queryFn: getTopRatedTV,
+  });
+}
+
+export function useSearchTV(keyword: string) {
+  return useQuery<ITvResponse>({
+    queryKey: ["tv", "search", keyword],
+    queryFn: () => getSearchTV(keyword),
+    enabled: keyword.trim().length > 0,
   });
 }

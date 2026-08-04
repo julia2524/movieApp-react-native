@@ -1,5 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { getNowPlaying, getTopRated, getUpcoming } from "../api/movies";
+import {
+  getNowPlaying,
+  getSearchMovies,
+  getTopRated,
+  getUpcoming,
+} from "../api/movies";
 import { IMovieResponse } from "../types/movies";
 
 export function useNowPlaying() {
@@ -21,5 +26,13 @@ export function useUpcomingMovies() {
   return useQuery<IMovieResponse>({
     queryKey: ["movies", "upcoming"],
     queryFn: getUpcoming,
+  });
+}
+
+export function useSearchMovies(keyword: string) {
+  return useQuery<IMovieResponse>({
+    queryKey: ["movies", "search", keyword],
+    queryFn: () => getSearchMovies(keyword),
+    enabled: keyword.trim().length > 0,
   });
 }

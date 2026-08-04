@@ -1,4 +1,5 @@
 export const lightTheme = {
+  isDark: false,
   mainBgColor: "#f1f2f6", // 너무 쨍한 순백색보다는 아주 연한 회색빛이 돌아서 눈이 편안함
   textColor: "#2f3640", // 가독성이 좋고 너무 차갑지 않은 진한 차콜 톤
   accentColor: "#e1b12c", // 싸구려 노랑 대신 살짝 다운된 고급스러운 골드/머스타드 톤
@@ -7,6 +8,7 @@ export const lightTheme = {
 };
 
 export const darkTheme = {
+  isDark: true,
   mainBgColor: "#1e272e", // 깊고 부드러운 다크 네이비/차콜 톤
   textColor: "#f5f6fa", // 어두운 배경에서 쨍하게 잘 읽히는 아이보리/화이트 톤
   accentColor: "#fbc531", // 다크모드에서는 살짝 밝고 영롱하게 빛나는 골드옐로

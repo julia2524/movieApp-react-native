@@ -12,3 +12,11 @@ export async function getTopRated(): Promise<IMovieResponse> {
 export async function getUpcoming(): Promise<IMovieResponse> {
   return fetchAPI("/movie/upcoming?language=en-US&page=1");
 }
+
+export async function getSearchMovies(
+  keyword: string,
+): Promise<IMovieResponse> {
+  return fetchAPI(
+    `/search/movie?query=${encodeURIComponent(keyword)}&include_adult=false&language=en-US&page=1`,
+  );
+}

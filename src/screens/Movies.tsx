@@ -16,15 +16,11 @@ import MovieCarousel from "../components/MovieCarousel";
 import HorizontalMediaList from "../components/HorizontalMediaList";
 import VerticalMediaCard from "../components/VerticalMediaCard";
 import { useState } from "react";
+import HorizontalMediaSection from "../components/HorizontalMediaSection";
 
 const Container = styled.View`
   /* background-color: ${(props) => props.theme.cardBgColor}; */
   flex: 1;
-`;
-
-const HView = styled.View`
-  flex: 1;
-  padding-left: 15px;
 `;
 
 const CategoryTitle = styled.Text`
@@ -37,7 +33,6 @@ const CategoryTitle = styled.Text`
 `;
 
 export default function Movies() {
-  // const theme = useTheme();
   const { width, height } = useWindowDimensions();
   const [refreshing, setRefreshing] = useState(false);
 
@@ -51,6 +46,13 @@ export default function Movies() {
     isLoading: topLoading,
     refetch: topRefetch,
   } = useTopRatedMovies();
+  const topMedia =
+    topData?.results.map((movie) => ({
+      id: movie.id,
+      posterPath: movie.poster_path ?? "",
+      title: movie.title,
+      rating: movie.vote_average,
+    })) ?? [];
   const {
     data: upcomingData,
     isLoading: upcomingLoading,
@@ -84,22 +86,7 @@ export default function Movies() {
                 data={nowData?.results ?? []}
                 renderItem={({ item }) => <MovieCarousel movie={item} />}
               />
-              <CategoryTitle>Top Rated</CategoryTitle>
-              <HView>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  keyExtractor={(item) => item.id.toString()}
-                  data={topData?.results ?? []}
-                  renderItem={({ item }) => (
-                    <HorizontalMediaList
-                      posterPath={item.poster_path ?? ""}
-                      title={item.title}
-                      rating={item.vote_average}
-                    />
-                  )}
-                />
-              </HView>
+              <HorizontalMediaSection data={topMedia} title="Top Rated" />
               <CategoryTitle>Upcoming</CategoryTitle>
             </>
           }

@@ -10,3 +10,9 @@ export async function getPopular(): Promise<ITvResponse> {
 export async function getTopRatedTV(): Promise<ITvResponse> {
   return fetchAPI("/tv/top_rated?language=en-US&page=1");
 }
+
+export async function getSearchTV(keyword: string): Promise<ITvResponse> {
+  return fetchAPI(
+    `/search/tv?query=${encodeURIComponent(keyword)}&include_adult=false&language=en-US&page=1`,
+  );
+}

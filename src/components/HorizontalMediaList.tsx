@@ -1,4 +1,4 @@
-import styled from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 import { IMovie } from "../types/movies";
 import { makeImagePath } from "../utils/makeImagePath";
 
@@ -21,6 +21,7 @@ const HContent = styled.View`
   flex-direction: column;
   width: 120px;
   margin-bottom: 5px;
+  justify-content: center;
 `;
 const HTitle = styled.Text`
   color: ${(props) => props.theme.textColor};
@@ -39,14 +40,25 @@ export default function HorizontalMediaList({
   title,
   rating,
 }: HorizontalMediaListProps) {
+  const theme = useTheme();
   return (
     <HItem>
-      <HImage source={{ uri: makeImagePath(posterPath) }} />
+      <HImage
+        source={
+          posterPath
+            ? { uri: makeImagePath(posterPath) }
+            : theme.isDark
+              ? require("../../assets/images/no-poster-dark.png")
+              : require("../../assets/images/no-poster-light.png")
+        }
+      />
       <HContent>
         <HTitle numberOfLines={1} ellipsizeMode="tail">
           {title.length > 15 ? `${title.slice(0, 15)}...` : title}
         </HTitle>
-        <HRate>⭐️ {rating.toFixed(1)} / 10</HRate>
+        <HRate>
+          {rating === 0 ? "Coming Soon" : `⭐️ ${rating.toFixed(0)} / 10`}
+        </HRate>
       </HContent>
     </HItem>
   );
