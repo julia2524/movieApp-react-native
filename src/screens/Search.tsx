@@ -14,17 +14,31 @@ const TextInput = styled.TextInput`
   border-radius: 10px;
   margin: 13px;
   padding-left: 13px;
+  color: ${(props) => props.theme.textColor};
 `;
 
 export default function Search() {
   //const theme = useTheme();
   const [text, setText] = useState("");
   const [keyword, setKeyword] = useState("");
-  const { data: movieData, isLoading: movieLoading } = useSearchMovies(keyword);
-  const { data: tvData, isLoading: tvLoading } = useSearchTV(keyword);
+  const {
+    data: movieData,
+    isLoading: movieLoading,
+    hasNextPage: movieHasNextPage,
+    fetchNextPage: movieFetchNextPage,
+  } = useSearchMovies(keyword);
+  const {
+    data: tvData,
+    isLoading: tvLoading,
+    hasNextPage: tvHasNextPage,
+    fetchNextPage: tvFetchNextPage,
+  } = useSearchTV(keyword);
+  const movieMediaData = movieData?.pages.flatMap((page) => page.results) ?? [];
+  const tvMediaData = tvData?.pages.flatMap((page) => page.results) ?? [];
+
   const isLoading = movieLoading || tvLoading;
   const movie =
-    movieData?.results.map((movie) => ({
+    movieMediaData.map((movie) => ({
       id: movie.id,
       posterPath: movie.poster_path ?? "",
       backdropPath: movie.backdrop_path ?? "",
@@ -33,7 +47,7 @@ export default function Search() {
       rating: movie.vote_average,
     })) ?? [];
   const tv =
-    tvData?.results.map((tv) => ({
+    tvMediaData.map((tv) => ({
       id: tv.id,
       posterPath: tv.poster_path ?? "",
       backdropPath: tv.backdrop_path ?? "",
@@ -64,8 +78,16 @@ export default function Search() {
             data={movie}
             title="Movies"
             mediaType="movie"
+            hasNextPage={movieHasNextPage}
+            fetchNextPage={movieFetchNextPage}
           />
-          <HorizontalMediaSection data={tv} title="TV" mediaType="tv" />
+          <HorizontalMediaSection
+            data={tv}
+            title="TV"
+            mediaType="tv"
+            hasNextPage={tvHasNextPage}
+            fetchNextPage={tvFetchNextPage}
+          />
         </>
       )}
     </Container>

@@ -2,6 +2,7 @@ import { FlatList } from "react-native";
 import styled from "styled-components/native";
 import { ITv } from "../types/tv";
 import HorizontalMediaList from "./HorizontalMediaList";
+import { InfiniteQueryObserverResult } from "@tanstack/react-query";
 
 const CategoryTitle = styled.Text`
   padding-top: 15px;
@@ -28,12 +29,19 @@ interface HorizontalSectionProps {
   data: IMediaItem[];
   title: string;
   mediaType: "movie" | "tv";
+  hasNextPage: boolean | undefined;
+  fetchNextPage: () => Promise<InfiniteQueryObserverResult<any, unknown>>;
 }
 export default function HorizontalMediaSection({
   data,
   title,
   mediaType,
+  hasNextPage,
+  fetchNextPage,
 }: HorizontalSectionProps) {
+  const loadMore = () => {
+    if (hasNextPage) fetchNextPage();
+  };
   return (
     <>
       <CategoryTitle>{title}</CategoryTitle>
@@ -41,7 +49,9 @@ export default function HorizontalMediaSection({
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item, index) => `${item.id}-${index}`}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.5}
           data={data}
           renderItem={({ item }) => (
             <HorizontalMediaList

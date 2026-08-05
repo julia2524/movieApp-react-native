@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import {
   getDetailMovie,
   getNowPlaying,
@@ -17,24 +17,46 @@ export function useNowPlaying() {
 }
 
 export function useTopRatedMovies() {
-  return useQuery<IMovieResponse>({
+  return useInfiniteQuery<IMovieResponse>({
     queryKey: ["movies", "top"],
-    queryFn: getTopRated,
+    queryFn: ({ pageParam = 1 }) => getTopRated(pageParam as number),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPage) => {
+      if (lastPage.page < lastPage.total_pages) {
+        return allPage.length + 1;
+      }
+      return null;
+    },
   });
 }
 
 export function useUpcomingMovies() {
-  return useQuery<IMovieResponse>({
+  return useInfiniteQuery<IMovieResponse>({
     queryKey: ["movies", "upcoming"],
-    queryFn: getUpcoming,
+    queryFn: ({ pageParam = 1 }) => getUpcoming(pageParam as number),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPage) => {
+      if (lastPage.page < lastPage.total_pages) {
+        return allPage.length + 1;
+      }
+      return null;
+    },
   });
 }
 
 export function useSearchMovies(keyword: string) {
-  return useQuery<IMovieResponse>({
+  return useInfiniteQuery<IMovieResponse>({
     queryKey: ["movies", "search", keyword],
-    queryFn: () => getSearchMovies(keyword),
+    queryFn: ({ pageParam = 1 }) =>
+      getSearchMovies(keyword, pageParam as number),
     enabled: keyword.trim().length > 0,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPage) => {
+      if (lastPage.page < lastPage.total_pages) {
+        return allPage.length + 1;
+      }
+      return null;
+    },
   });
 }
 

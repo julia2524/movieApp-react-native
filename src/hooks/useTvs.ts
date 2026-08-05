@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import {
   getAiringToday,
   getDetailTv,
@@ -9,30 +9,58 @@ import {
 import { ITvDetail, ITvResponse } from "../types/tv";
 
 export function useAiringToday() {
-  return useQuery<ITvResponse>({
+  return useInfiniteQuery<ITvResponse>({
     queryKey: ["tv", "today"],
-    queryFn: getAiringToday,
+    queryFn: ({ pageParam = 1 }) => getAiringToday(pageParam as number),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPage) => {
+      if (lastPage.page < lastPage.total_pages) {
+        return allPage.length + 1;
+      }
+      return null;
+    },
   });
 }
 
 export function usePopularTv() {
-  return useQuery<ITvResponse>({
+  return useInfiniteQuery<ITvResponse>({
     queryKey: ["tv", "popular"],
-    queryFn: getPopular,
+    queryFn: ({ pageParam = 1 }) => getPopular(pageParam as number),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPage) => {
+      if (lastPage.page < lastPage.total_pages) {
+        return allPage.length + 1;
+      }
+      return null;
+    },
   });
 }
 export function useTopRatedTV() {
-  return useQuery<ITvResponse>({
+  return useInfiniteQuery<ITvResponse>({
     queryKey: ["tv", "topRated"],
-    queryFn: getTopRatedTV,
+    queryFn: ({ pageParam = 1 }) => getTopRatedTV(pageParam as number),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPage) => {
+      if (lastPage.page < lastPage.total_pages) {
+        return allPage.length + 1;
+      }
+      return null;
+    },
   });
 }
 
 export function useSearchTV(keyword: string) {
-  return useQuery<ITvResponse>({
+  return useInfiniteQuery<ITvResponse>({
     queryKey: ["tv", "search", keyword],
-    queryFn: () => getSearchTV(keyword),
+    queryFn: ({ pageParam = 1 }) => getSearchTV(keyword, pageParam as number),
     enabled: keyword.trim().length > 0,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPage) => {
+      if (lastPage.page < lastPage.total_pages) {
+        return allPage.length + 1;
+      }
+      return null;
+    },
   });
 }
 

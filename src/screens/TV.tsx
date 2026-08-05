@@ -16,20 +16,30 @@ export default function TV() {
     data: popularData,
     isLoading: popularIsLoading,
     refetch: popularRefetch,
+    hasNextPage: popularHasNextPage,
+    fetchNextPage: popularFetchNextPage,
   } = usePopularTv();
   const {
     data: airingData,
     isLoading: airingIsLoading,
     refetch: airingRefetch,
+    hasNextPage: airingHasNextPage,
+    fetchNextPage: airingFetchNextPage,
   } = useAiringToday();
   const {
     data: topData,
     isLoading: topIsLoading,
     refetch: topRefetch,
+    hasNextPage: topHasNextPage,
+    fetchNextPage: topFetchNextPage,
   } = useTopRatedTV();
-
+  const popularMediaData =
+    popularData?.pages.flatMap((page) => page.results) ?? [];
+  const airingMediaData =
+    airingData?.pages.flatMap((page) => page.results) ?? [];
+  const topMediaData = topData?.pages.flatMap((page) => page.results) ?? [];
   const popularMedia =
-    popularData?.results.map((tv) => ({
+    popularMediaData.map((tv) => ({
       id: tv.id,
       posterPath: tv.poster_path ?? "",
       backdropPath: tv.backdrop_path ?? "",
@@ -38,7 +48,7 @@ export default function TV() {
       rating: tv.vote_average,
     })) ?? [];
   const airingMedia =
-    airingData?.results.map((tv) => ({
+    airingMediaData.map((tv) => ({
       id: tv.id,
       posterPath: tv.poster_path ?? "",
       backdropPath: tv.backdrop_path ?? "",
@@ -47,7 +57,7 @@ export default function TV() {
       rating: tv.vote_average,
     })) ?? [];
   const topMedia =
-    topData?.results.map((tv) => ({
+    topMediaData.map((tv) => ({
       id: tv.id,
       posterPath: tv.poster_path ?? "",
       backdropPath: tv.backdrop_path ?? "",
@@ -76,16 +86,22 @@ export default function TV() {
         data={airingMedia}
         title="Airing Today"
         mediaType="tv"
+        hasNextPage={airingHasNextPage}
+        fetchNextPage={airingFetchNextPage}
       />
       <HorizontalMediaSection
         data={popularMedia}
         title="Popular"
         mediaType="tv"
+        hasNextPage={popularHasNextPage}
+        fetchNextPage={popularFetchNextPage}
       />
       <HorizontalMediaSection
         data={topMedia}
         title="Top Rated"
         mediaType="tv"
+        hasNextPage={topHasNextPage}
+        fetchNextPage={topFetchNextPage}
       />
     </Container>
   );

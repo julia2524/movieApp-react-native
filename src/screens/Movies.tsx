@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   RefreshControl,
   useWindowDimensions,
@@ -45,19 +46,23 @@ export default function Movies() {
     data: topData,
     isLoading: topLoading,
     refetch: topRefetch,
+    hasNextPage: topHasNextPage,
+    fetchNextPage: topFetchNextPage,
   } = useTopRatedMovies();
-  const topMedia =
-    topData?.results.map((movie) => ({
-      id: movie.id,
-      posterPath: movie.poster_path ?? "",
-      backdropPath: movie.backdrop_path ?? "",
-      overview: movie.overview,
-      title: movie.title,
-      rating: movie.vote_average,
-    })) ?? [];
+  const topMediaData = topData?.pages.flatMap((page) => page.results) ?? [];
+  const topMedia = topMediaData.map((movie) => ({
+    id: movie.id,
+    posterPath: movie.poster_path ?? "",
+    backdropPath: movie.backdrop_path ?? "",
+    overview: movie.overview,
+    title: movie.title,
+    rating: movie.vote_average,
+  }));
   const {
     data: upcomingData,
     isLoading: upcomingLoading,
+    hasNextPage: upcomingHasNextPage,
+    fetchNextPage: upcomingFecthNextPage,
     refetch: upcomingRefetch,
   } = useUpcomingMovies();
   const isLoading = nowLoading || topLoading || upcomingLoading;
@@ -66,6 +71,10 @@ export default function Movies() {
     setRefreshing(true);
     await Promise.all([nowRefetch(), topRefetch(), upcomingRefetch()]);
     setRefreshing(false);
+  };
+
+  const upcomingLoad = () => {
+    if (upcomingHasNextPage) upcomingFecthNextPage();
   };
 
   return isLoading ? (
@@ -78,7 +87,7 @@ export default function Movies() {
         <FlatList
           refreshing={refreshing}
           onRefresh={onRefresh}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item, index) => `${item.id}-${index}`}
           ListHeaderComponent={
             <>
               <Carousel
@@ -92,11 +101,15 @@ export default function Movies() {
                 data={topMedia}
                 title="Top Rated"
                 mediaType="movie"
+                hasNextPage={topHasNextPage}
+                fetchNextPage={topFetchNextPage}
               />
               <CategoryTitle>Upcoming</CategoryTitle>
             </>
           }
-          data={upcomingData?.results ?? []}
+          data={upcomingData?.pages.flatMap((page) => page.results)}
+          onEndReached={upcomingLoad}
+          onEndReachedThreshold={0.5}
           renderItem={({ item }) => <VerticalMediaCard movie={item} />}
         />
       </>
