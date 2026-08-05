@@ -9,7 +9,10 @@ import {
 } from "react-native";
 import styled, { useTheme } from "styled-components/native";
 import { makeImagePath } from "../utils/makeImagePath";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types/navigation";
 import { LinearGradient } from "expo-linear-gradient";
 import { useMovieDetail } from "../hooks/useMovies";
@@ -18,11 +21,12 @@ import { IMovieDetail } from "../types/movies";
 import { ITvDetail } from "../types/tv";
 import { Ionicons } from "@expo/vector-icons";
 import * as WebBrowser from "expo-web-browser";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect } from "react";
 
 // React Navigation이 제공하는 NativeStackScreenProps 타입을 쓰면 route 타입이 자동 완성
-type DetailsProps = NativeStackScreenProps<RootStackParamList, "Details">;
+type DetailsRouteProps = RouteProp<RootStackParamList, "Details">;
+type DetailNavigationProps = NativeStackNavigationProp<RootStackParamList>;
 
 const Container = styled.View`
   background-color: ${(props) => props.theme.mainBgColor};
@@ -90,14 +94,13 @@ const ItmeTitle = styled.Text`
   color: ${(props) => props.theme.textColor};
 `;
 
-export default function Details({
-  route: { params },
-  navigation,
-}: DetailsProps) {
+export default function Details() {
   const { height, width } = useWindowDimensions();
   const theme = useTheme();
-
-  const { title, overview, backdropPath, posterPath, id, mediaType } = params;
+  const route = useRoute<DetailsRouteProps>();
+  const navigation = useNavigation<DetailNavigationProps>();
+  const { title, overview, backdropPath, posterPath, id, mediaType } =
+    route.params;
   const {
     data: movieData,
     isLoading: movieLoading,
@@ -168,7 +171,7 @@ export default function Details({
       <Overview>{overview}</Overview>
       <CategoryTitle>Trailer</CategoryTitle>
       <FlatList
-        style={{ paddingLeft: 20 }}
+        style={{ paddingLeft: 20, marginBottom: 20 }}
         keyExtractor={(item) => item.key}
         data={trailer ?? []}
         renderItem={({ item }) => (
