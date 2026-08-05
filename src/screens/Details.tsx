@@ -1,7 +1,9 @@
 import {
   FlatList,
+  Share,
   StyleSheet,
   Text,
+  TouchableOpacity,
   useWindowDimensions,
   View,
 } from "react-native";
@@ -16,6 +18,8 @@ import { IMovieDetail } from "../types/movies";
 import { ITvDetail } from "../types/tv";
 import { Ionicons } from "@expo/vector-icons";
 import * as WebBrowser from "expo-web-browser";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { useEffect } from "react";
 
 // React Navigation이 제공하는 NativeStackScreenProps 타입을 쓰면 route 타입이 자동 완성
 type DetailsProps = NativeStackScreenProps<RootStackParamList, "Details">;
@@ -86,9 +90,13 @@ const ItmeTitle = styled.Text`
   color: ${(props) => props.theme.textColor};
 `;
 
-export default function Details({ route: { params } }: DetailsProps) {
+export default function Details({
+  route: { params },
+  navigation,
+}: DetailsProps) {
   const { height, width } = useWindowDimensions();
   const theme = useTheme();
+
   const { title, overview, backdropPath, posterPath, id, mediaType } = params;
   const {
     data: movieData,
@@ -108,6 +116,31 @@ export default function Details({ route: { params } }: DetailsProps) {
   const openYouTube = async (key: string) => {
     await WebBrowser.openBrowserAsync(`https://www.youtube.com/watch?v=${key}`);
   };
+  const shareMedia = async (title: string, id: number, mediaType: string) => {
+    try {
+      await Share.share({
+        message: `이 콘텐츠 어때? 🎬\n${title}\nhttps://www.themoviedb.org/${mediaType}/${id}`,
+        title,
+      });
+    } catch (error) {
+      alert(error);
+    }
+  };
+  const isLoading = mediaType === "movie" ? movieLoading : tvLoading;
+  useEffect(() => {
+    if (!isLoading) {
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={() => shareMedia(title, id, mediaType)}
+            style={{ marginRight: 10 }}
+          >
+            <Ionicons name="share-outline" size={24} color={theme.textColor} />
+          </TouchableOpacity>
+        ),
+      });
+    }
+  }, [isLoading, data]);
   return (
     <Container>
       <Header style={{ height: height / 4, width }}>
@@ -133,7 +166,7 @@ export default function Details({ route: { params } }: DetailsProps) {
         </ItemDetail>
       </Header>
       <Overview>{overview}</Overview>
-      <CategoryTitle>Videos</CategoryTitle>
+      <CategoryTitle>Trailer</CategoryTitle>
       <FlatList
         style={{ paddingLeft: 20 }}
         keyExtractor={(item) => item.key}
