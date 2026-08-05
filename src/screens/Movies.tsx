@@ -50,6 +50,8 @@ export default function Movies() {
     topData?.results.map((movie) => ({
       id: movie.id,
       posterPath: movie.poster_path ?? "",
+      backdropPath: movie.backdrop_path ?? "",
+      overview: movie.overview,
       title: movie.title,
       rating: movie.vote_average,
     })) ?? [];
@@ -62,7 +64,7 @@ export default function Movies() {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await Promise.all([nowRefetch, topRefetch, upcomingRefetch]);
+    await Promise.all([nowRefetch(), topRefetch(), upcomingRefetch()]);
     setRefreshing(false);
   };
 
@@ -86,7 +88,11 @@ export default function Movies() {
                 data={nowData?.results ?? []}
                 renderItem={({ item }) => <MovieCarousel movie={item} />}
               />
-              <HorizontalMediaSection data={topMedia} title="Top Rated" />
+              <HorizontalMediaSection
+                data={topMedia}
+                title="Top Rated"
+                mediaType="movie"
+              />
               <CategoryTitle>Upcoming</CategoryTitle>
             </>
           }

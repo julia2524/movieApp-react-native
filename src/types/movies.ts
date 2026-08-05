@@ -14,3 +14,14 @@ export interface IMovieResponse {
   total_pages: number;
   total_results: number;
 }
+
+export interface IMovieVideo {
+  name: string;
+  key: string;
+  site: string;
+  size: number;
+  type: string;
+}
+export interface IMovieDetail {
+  videos: { results: IMovieVideo[] };
+}

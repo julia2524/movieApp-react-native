@@ -5,12 +5,13 @@ import { StyleSheet } from "react-native";
 import { BlurView } from "expo-blur";
 import { makeImagePath } from "../utils/makeImagePath";
 import { IMovie } from "../types/movies";
+import { useNavigation } from "@react-navigation/native";
 
 interface MovieCarouselProps {
   movie: IMovie;
 }
 
-const CarouselItem = styled.View`
+const CarouselItem = styled.Pressable`
   flex: 1;
 `;
 const BackgroundImg = styled.Image`
@@ -45,8 +46,23 @@ const Overview = styled.Text`
   font-size: 12px;
 `;
 export default function MovieCarousel({ movie }: MovieCarouselProps) {
+  const navigation = useNavigation<any>();
   return (
-    <CarouselItem>
+    <CarouselItem
+      onPress={() =>
+        navigation.navigate("Details", {
+          id: movie.id,
+          title: movie.title,
+          posterPath: movie.poster_path,
+          backdropPath: movie.backdrop_path,
+          overview: movie.overview,
+          mediaType: "movie",
+        })
+      }
+      style={({ pressed }) => ({
+        opacity: pressed ? 0.9 : 1,
+      })}
+    >
       <BackgroundImg
         style={StyleSheet.absoluteFill}
         source={{ uri: makeImagePath(movie.backdrop_path ?? "") }}

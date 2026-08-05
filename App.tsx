@@ -1,11 +1,11 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useColorScheme } from "react-native";
-import Tabs from "./Tabs";
 import { ThemeProvider } from "styled-components/native";
 import { darkTheme, lightTheme } from "./src/constants/theme";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Root from "./src/navigators/Root";
 
 const queryClient = new QueryClient(); // Provide the client to your App
 export default function App() {
@@ -15,7 +15,7 @@ export default function App() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
           <NavigationContainer>
-            <Tabs />
+            <Root />
           </NavigationContainer>
         </ThemeProvider>
       </GestureHandlerRootView>

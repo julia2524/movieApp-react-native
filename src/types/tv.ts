@@ -1,9 +1,9 @@
 export interface ITv {
-  backdrop_path: string | null;
   id: number;
-  overview: SVGStringList;
-  name: string;
+  backdrop_path: string | null;
   poster_path: string | null;
+  overview: string;
+  name: string;
   vote_average: number;
 }
 export interface ITvResponse {
@@ -11,4 +11,14 @@ export interface ITvResponse {
   results: ITv[];
   total_pages: number;
   total_results: number;
+}
+export interface ITvVideo {
+  name: string;
+  key: string;
+  site: string;
+  size: number;
+  type: string;
+}
+export interface ITvDetail {
+  videos: { results: ITvVideo[] };
 }

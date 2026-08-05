@@ -20,15 +20,19 @@ interface IMediaItem {
   posterPath: string;
   title: string;
   rating: number;
+  backdropPath: string;
+  overview: string;
 }
 
 interface HorizontalSectionProps {
   data: IMediaItem[];
   title: string;
+  mediaType: "movie" | "tv";
 }
 export default function HorizontalMediaSection({
   data,
   title,
+  mediaType,
 }: HorizontalSectionProps) {
   return (
     <>
@@ -41,9 +45,13 @@ export default function HorizontalMediaSection({
           data={data}
           renderItem={({ item }) => (
             <HorizontalMediaList
+              id={item.id}
+              backdropPath={item.backdropPath}
               posterPath={item.posterPath}
               title={item.title}
               rating={item.rating}
+              overview={item.overview}
+              mediaType={mediaType}
             />
           )}
         />

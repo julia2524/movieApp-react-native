@@ -1,12 +1,14 @@
 import styled from "styled-components/native";
 import { IMovie } from "../types/movies";
 import { makeImagePath } from "../utils/makeImagePath";
+import { useNavigation } from "@react-navigation/native";
+import { opacity } from "react-native-reanimated/lib/typescript/Colors";
 
 interface VerticalMediaCardProps {
   movie: IMovie;
 }
 
-const VView = styled.View`
+const VView = styled.Pressable`
   padding-top: 15px;
   padding-left: 15px;
   flex-direction: row;
@@ -41,8 +43,21 @@ const Release = styled.Text`
   padding-bottom: 5px;
 `;
 export default function VerticalMediaCard({ movie }: VerticalMediaCardProps) {
+  const navigation = useNavigation<any>();
   return (
-    <VView>
+    <VView
+      onPress={() =>
+        navigation.navigate("Details", {
+          id: movie.id,
+          title: movie.title,
+          posterPath: movie.poster_path,
+          backdropPath: movie.backdrop_path,
+          overview: movie.overview,
+          mediaType: "movie",
+        })
+      }
+      style={({ pressed }) => ({ opacity: pressed ? 0.9 : 1 })}
+    >
       <VImage source={{ uri: makeImagePath(movie.poster_path ?? "") }} />
       <VContent>
         <VTitle numberOfLines={1} ellipsizeMode="tail">

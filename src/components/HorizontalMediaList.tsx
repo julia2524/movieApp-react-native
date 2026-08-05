@@ -1,13 +1,19 @@
 import styled, { useTheme } from "styled-components/native";
 import { IMovie } from "../types/movies";
 import { makeImagePath } from "../utils/makeImagePath";
+import { useNavigation } from "@react-navigation/native";
 
 interface HorizontalMediaListProps {
   posterPath: string;
   title: string;
   rating: number;
+  id: number;
+  backdropPath: string;
+  overview: string;
+  mediaType: "movie" | "tv";
 }
-const HItem = styled.View`
+
+const HItem = styled.Pressable`
   margin-right: 15px;
   margin-top: 8px;
 `;
@@ -39,10 +45,29 @@ export default function HorizontalMediaList({
   posterPath,
   title,
   rating,
+  id,
+  backdropPath,
+  overview,
+  mediaType,
 }: HorizontalMediaListProps) {
   const theme = useTheme();
+  const navigation = useNavigation<any>();
   return (
-    <HItem>
+    <HItem
+      onPress={() =>
+        navigation.navigate("Details", {
+          id,
+          title,
+          posterPath,
+          backdropPath,
+          overview,
+          mediaType,
+        })
+      }
+      style={({ pressed }) => ({
+        opacity: pressed ? 0.9 : 1,
+      })}
+    >
       <HImage
         source={
           posterPath

@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import {
+  getDetailMovie,
   getNowPlaying,
   getSearchMovies,
   getTopRated,
   getUpcoming,
 } from "../api/movies";
-import { IMovieResponse } from "../types/movies";
+import { IMovieDetail, IMovieResponse } from "../types/movies";
 
 export function useNowPlaying() {
   // Queries
@@ -34,5 +35,13 @@ export function useSearchMovies(keyword: string) {
     queryKey: ["movies", "search", keyword],
     queryFn: () => getSearchMovies(keyword),
     enabled: keyword.trim().length > 0,
+  });
+}
+
+export function useMovieDetail(id: number, enabled: boolean) {
+  return useQuery<IMovieDetail>({
+    queryKey: ["movie", id],
+    queryFn: () => getDetailMovie(id),
+    enabled,
   });
 }

@@ -8,18 +8,6 @@ const Container = styled.ScrollView`
   /* background-color: ${(props) => props.theme.cardBgColor}; */
   flex: 1;
 `;
-const CategoryTitle = styled.Text`
-  padding-top: 15px;
-  padding-left: 15px;
-  color: ${(props) => props.theme.textColor};
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 8px;
-`;
-const HView = styled.View`
-  flex: 1;
-  padding-left: 15px;
-`;
 
 export default function TV() {
   const [refreshing, setRefreshing] = useState(false);
@@ -44,6 +32,8 @@ export default function TV() {
     popularData?.results.map((tv) => ({
       id: tv.id,
       posterPath: tv.poster_path ?? "",
+      backdropPath: tv.backdrop_path ?? "",
+      overview: tv.overview,
       title: tv.name,
       rating: tv.vote_average,
     })) ?? [];
@@ -51,6 +41,8 @@ export default function TV() {
     airingData?.results.map((tv) => ({
       id: tv.id,
       posterPath: tv.poster_path ?? "",
+      backdropPath: tv.backdrop_path ?? "",
+      overview: tv.overview,
       title: tv.name,
       rating: tv.vote_average,
     })) ?? [];
@@ -58,6 +50,8 @@ export default function TV() {
     topData?.results.map((tv) => ({
       id: tv.id,
       posterPath: tv.poster_path ?? "",
+      backdropPath: tv.backdrop_path ?? "",
+      overview: tv.overview,
       title: tv.name,
       rating: tv.vote_average,
     })) ?? [];
@@ -65,7 +59,7 @@ export default function TV() {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await Promise.all([popularRefetch, airingRefetch, topRefetch]);
+    await Promise.all([popularRefetch(), airingRefetch(), topRefetch()]);
     setRefreshing(false);
   };
   return isLoading ? (
@@ -78,9 +72,21 @@ export default function TV() {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
-      <HorizontalMediaSection data={airingMedia} title="Airing Today" />
-      <HorizontalMediaSection data={popularMedia} title="Popular" />
-      <HorizontalMediaSection data={topMedia} title="Top Rated" />
+      <HorizontalMediaSection
+        data={airingMedia}
+        title="Airing Today"
+        mediaType="tv"
+      />
+      <HorizontalMediaSection
+        data={popularMedia}
+        title="Popular"
+        mediaType="tv"
+      />
+      <HorizontalMediaSection
+        data={topMedia}
+        title="Top Rated"
+        mediaType="tv"
+      />
     </Container>
   );
 }

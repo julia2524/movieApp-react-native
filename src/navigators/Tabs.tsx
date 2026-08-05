@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Movies from "./src/screens/Movies";
-import TV from "./src/screens/TV";
-import Search from "./src/screens/Search";
+import Movies from "../screens/Movies";
+import TV from "../screens/TV";
+import Search from "../screens/Search";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useTheme } from "styled-components/native";
 import { Pressable } from "react-native";
